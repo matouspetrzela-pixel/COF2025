@@ -419,7 +419,7 @@
         const preferences = {
             interested: ['AI', 'umělá inteligence', 'artificial intelligence', 'LinkedIn', 'úvodní seminář', 'úvod', 'digitální', 'digital', 'automatizace', 'platforma', 'inovace', 'startup', 'fintech', 'data', 'analytics', 'big data'],
             maybe: ['investice', 'investování', 'portfolio', 'akcie', 'kryptoměny', 'crypto', 'blockchain', 'marketing', 'obchod', 'byznys', 'strategie', 'plánování', 'analýza', 'síť', 'networking', 'vztahy', 'klient', 'poradenství', 'peníze', 'finance', 'bankovnictví', 'banking'],
-            notInterested: ['IT', 'technologie', 'tech', 'software', 'aplikace', 'systém', 'kybernetická', 'cyber', 'bezpečnost', 'security', 'cloud', 'cloud computing']
+            notInterested: ['IT', 'it ', 'technologie', 'tech', 'software', 'aplikace', 'systém', 'kybernetická', 'cyber', 'bezpečnost', 'security', 'cloud', 'cloud computing', 'IT bezpečnost', 'it bezpečnost', 'kybernetická bezpečnost', 'cyber security']
         };
 
         function parseProgram(text) {
@@ -541,19 +541,26 @@
             programData.forEach(item => {
                 const text = (item.title + ' ' + item.speaker + ' ' + item.description).toLowerCase();
                 
-                // Pokud už má status, necháme ho (nebo můžeme přepsat - podle potřeby)
-                // Pro automatické označování přepíšeme jen neoznačené
+                // Zkontrolovat preference - nejprve not-interested (má absolutní prioritu)
+                const hasNotInterested = preferences.notInterested.some(keyword => text.includes(keyword.toLowerCase()));
+                
+                // Pokud obsahuje IT/bezpečnost, vždy označit jako not-interested (i když už má jiný status)
+                if (hasNotInterested) {
+                    if (item.status !== 'not-interested') {
+                        item.status = 'not-interested';
+                        markedCount++;
+                    }
+                    return; // IT/bezpečnost má absolutní prioritu, nepokračujeme dál
+                }
+                
+                // Pokud už má status a není IT/bezpečnost, necháme ho
                 if (item.status !== 'default') return;
 
-                // Zkontrolovat preference - nejprve not-interested (má prioritu)
-                const hasNotInterested = preferences.notInterested.some(keyword => text.includes(keyword.toLowerCase()));
+                // Zkontrolovat ostatní preference
                 const hasInterested = preferences.interested.some(keyword => text.includes(keyword.toLowerCase()));
                 const hasMaybe = preferences.maybe.some(keyword => text.includes(keyword.toLowerCase()));
 
-                if (hasNotInterested) {
-                    item.status = 'not-interested';
-                    markedCount++;
-                } else if (hasInterested) {
+                if (hasInterested) {
                     item.status = 'interested';
                     markedCount++;
                 } else if (hasMaybe) {
