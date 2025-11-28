@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colors of Finance - Správce programu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .info-message {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .program-container {
+            margin-top: 30px;
+        }
+
+        .program-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .program-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .program-item.interested {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .program-item.maybe {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        .program-item.not-interested {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .program-item.default {
+            background: #f8f9fa;
+            border-color: #ddd;
+        }
+
+        .program-time {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .program-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .program-speaker {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .program-description {
+            color: #555;
+            margin-top: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .program-tags {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag {
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #495057;
+        }
+
+        .color-legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid;
+        }
+
+        .legend-color.green {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .legend-color.orange {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        .legend-color.red {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .legend-color.gray {
+            background: #f8f9fa;
+            border-color: #ddd;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .status-hint {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #999;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .status-hint strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Colors of Finance - Správce programu</h1>
+        <p class="subtitle">Zpřehledněte si program a označte si, co vás zajímá</p>
+
+        <div id="inputSection">
+            <div class="info-message">
+                ℹ️ <strong>Jak na to:</strong> Vložte program konference. Můžete zkopírovat text z webu nebo vložit strukturovaná data.
+                <br><strong>Formát:</strong> Každý řádek = jedna položka programu. Formát: <code>ČAS | NÁZEV | ŘEČNÍK | POPIS</code>
+                <br>Minimálně potřebujete: <code>ČAS | NÁZEV</code>
+            </div>
+
+            <div class="form-group">
+                <label for="programInput">Program konference:</label>
+                <textarea id="programInput" placeholder="Příklad:
+09:00 | Úvodní seminář | Jan Novák | Úvod do konference
+10:00 | AI ve financích | Petr Svoboda | Jak umělá inteligence mění finanční svět
+11:00 | LinkedIn pro finanční poradce | Marie Dvořáková | Jak efektivně využívat LinkedIn
+12:00 | IT bezpečnost | Tomáš Procházka | Kybernetická bezpečnost v bankovnictví"></textarea>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" onclick="loadProgram()">Načíst program</button>
+                <button class="btn btn-secondary" onclick="loadSampleProgram()">Načíst ukázkový program</button>
+                <button class="btn btn-info" onclick="autoMarkProgram()">Automaticky označit podle preferencí</button>
+            </div>
+        </div>
+
+        <div id="programSection" class="hidden">
+            <div class="color-legend">
+                <div class="legend-item">
+                    <div class="legend-color green"></div>
+                    <span><strong>Zajímá mě</strong> (zelená) - Klikněte na položku pro změnu</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color orange"></div>
+                    <span><strong>Možná</strong> (oranžová) - Klikněte na položku pro změnu</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color red"></div>
+                    <span><strong>Nezajímá mě</strong> (červená) - Klikněte na položku pro změnu</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color gray"></div>
+                    <span><strong>Neoznačeno</strong> (šedá) - Klikněte na položku pro změnu</span>
+                </div>
+            </div>
+
+            <div class="stats" id="stats"></div>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterProgram('all')">Vše</button>
+                <button class="filter-btn" onclick="filterProgram('interested')">Zajímá mě</button>
+                <button class="filter-btn" onclick="filterProgram('maybe')">Možná</button>
+                <button class="filter-btn" onclick="filterProgram('not-interested')">Nezajímá</button>
+                <button class="filter-btn" onclick="filterProgram('unmarked')">Neoznačeno</button>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-success" onclick="exportProgram()">📥 Exportovat program</button>
+                <button class="btn btn-secondary" onclick="resetView()">← Zpět na vstup</button>
+                <button class="btn btn-info" onclick="autoMarkProgram()">🔄 Znovu automaticky označit</button>
+            </div>
+
+            <div id="programContainer" class="program-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let programData = [];
+        let currentFilter = 'all';
+
+        // Klíčová slova pro automatické označování
+        const preferences = {
+            interested: ['IT', 'AI', 'umělá inteligence', 'artificial intelligence', 'LinkedIn', 'úvodní seminář', 'úvod', 'digitální', 'digital', 'technologie', 'tech', 'automatizace', 'software', 'aplikace', 'platforma', 'inovace', 'startup', 'fintech', 'kybernetická', 'cyber', 'bezpečnost', 'security', 'cloud', 'data', 'analytics', 'big data'],
+            maybe: ['investice', 'investování', 'portfolio', 'akcie', 'kryptoměny', 'crypto', 'blockchain', 'marketing', 'obchod', 'byznys', 'strategie', 'plánování', 'analýza', 'síť', 'networking', 'vztahy', 'klient', 'poradenství', 'peníze', 'finance', 'bankovnictví', 'banking']
+        };
+
+        function parseProgram(text) {
+            const lines = text.split('\n').filter(line => line.trim());
+            const program = [];
+
+            lines.forEach((line, index) => {
+                const parts = line.split('|').map(p => p.trim());
+                
+                if (parts.length >= 2) {
+                    program.push({
+                        id: index,
+                        time: parts[0] || 'Neznámý čas',
+                        title: parts[1] || 'Bez názvu',
+                        speaker: parts[2] || '',
+                        description: parts[3] || '',
+                        status: 'default', // default, interested, maybe, not-interested
+                        tags: extractTags(parts[1] + ' ' + (parts[2] || '') + ' ' + (parts[3] || ''))
+                    });
+                } else if (line.trim()) {
+                    // Pokud není formát s |, zkusíme jiný formát
+                    program.push({
+                        id: index,
+                        time: '',
+                        title: line.trim(),
+                        speaker: '',
+                        description: '',
+                        status: 'default',
+                        tags: extractTags(line)
+                    });
+                }
+            });
+
+            return program;
+        }
+
+        function extractTags(text) {
+            const tags = [];
+            const lowerText = text.toLowerCase();
+            
+            const tagKeywords = {
+                'IT': ['it', 'technologie', 'tech', 'software', 'aplikace', 'systém'],
+                'AI': ['ai', 'umělá inteligence', 'artificial intelligence', 'machine learning', 'ml', 'neural'],
+                'LinkedIn': ['linkedin', 'sociální sítě', 'social media', 'sociální média'],
+                'Investice': ['investice', 'investování', 'portfolio', 'akcie', 'akciový trh'],
+                'Kryptoměny': ['krypto', 'crypto', 'bitcoin', 'blockchain', 'ethereum'],
+                'Marketing': ['marketing', 'reklama', 'branding', 'propagace'],
+                'Finance': ['finance', 'peníze', 'bankovnictví', 'banking', 'finanční'],
+                'Bezpečnost': ['bezpečnost', 'security', 'kybernetická', 'cyber', 'ochrana'],
+                'Cloud': ['cloud', 'cloud computing', 'cloudové řešení'],
+                'Data': ['data', 'analytics', 'big data', 'analýza dat']
+            };
+
+            for (const [tag, keywords] of Object.entries(tagKeywords)) {
+                if (keywords.some(keyword => lowerText.includes(keyword))) {
+                    tags.push(tag);
+                }
+            }
+
+            return tags;
+        }
+
+        function loadProgram() {
+            const input = document.getElementById('programInput').value.trim();
+            
+            if (!input) {
+                alert('Prosím vložte program');
+                return;
+            }
+
+            programData = parseProgram(input);
+            
+            if (programData.length === 0) {
+                alert('Nepodařilo se načíst žádné položky programu. Zkontrolujte formát.');
+                return;
+            }
+            
+            // Načíst uložené stavy
+            loadSavedStates();
+            
+            displayProgram();
+            document.getElementById('inputSection').classList.add('hidden');
+            document.getElementById('programSection').classList.remove('hidden');
+            
+            // Uložit do localStorage
+            saveProgram();
+        }
+
+        function loadSampleProgram() {
+            const sample = `09:00 | Úvodní seminář | Organizátoři | Vítejte na Colors of Finance 2025
+09:30 | AI ve financích - budoucnost je tady | Jan Novák | Jak umělá inteligence mění finanční poradenství
+10:00 | LinkedIn pro finanční profesionály | Marie Dvořáková | Efektivní využití LinkedIn pro budování klientely
+10:30 | IT bezpečnost v bankovnictví | Tomáš Procházka | Kybernetická bezpečnost a ochrana dat
+11:00 | Investiční strategie pro rok 2025 | Petr Svoboda | Aktuální trendy na trzích
+11:30 | Kryptoměny a blockchain technologie | Jakub Novotný | Budoucnost digitálních aktiv
+12:00 | Marketing pro finanční poradce | Lucie Svobodová | Jak oslovit nové klienty
+12:30 | Automatizace ve finančním poradenství | Martin Dvořák | Software a nástroje pro efektivitu
+13:00 | Oběd | - | -
+13:30 | Digitální transformace bankovnictví | Anna Nováková | Jak banky reagují na změny
+14:00 | Fintech inovace | Pavel Horák | Nové technologie ve finančních službách
+14:30 | Cloud computing pro finance | Michal Kratochvíl | Bezpečné cloudové řešení
+15:00 | Data analytics ve financích | Veronika Procházková | Jak využít data pro lepší rozhodování
+15:30 | Networking a budování vztahů | Zuzana Nová | Efektivní networking na konferencích
+16:00 | Startup ekosystém v ČR | Ondřej Malý | Jak začít s vlastním fintech projektem
+16:30 | Závěrečné shrnutí | Organizátoři | Shrnutí hlavních témat konference`;
+
+            document.getElementById('programInput').value = sample;
+            loadProgram();
+        }
+
+        function autoMarkProgram() {
+            if (programData.length === 0) {
+                alert('Nejprve načtěte program');
+                return;
+            }
+
+            let markedCount = 0;
+
+            programData.forEach(item => {
+                const text = (item.title + ' ' + item.speaker + ' ' + item.description).toLowerCase();
+                
+                // Pokud už má status, necháme ho (nebo můžeme přepsat - podle potřeby)
+                // Pro automatické označování přepíšeme jen neoznačené
+                if (item.status !== 'default') return;
+
+                // Zkontrolovat preference
+                const hasInterested = preferences.interested.some(keyword => text.includes(keyword.toLowerCase()));
+                const hasMaybe = preferences.maybe.some(keyword => text.includes(keyword.toLowerCase()));
+
+                if (hasInterested) {
+                    item.status = 'interested';
+                    markedCount++;
+                } else if (hasMaybe) {
+                    item.status = 'maybe';
+                    markedCount++;
+                }
+            });
+
+            displayProgram();
+            saveProgram();
+            
+            if (markedCount > 0) {
+                alert(`Automaticky označeno ${markedCount} položek podle vašich preferencí (IT, AI, LinkedIn, Úvodní seminář).`);
+            } else {
+                alert('Žádné nové položky nebyly automaticky označeny. Možná už jsou všechny označené nebo neodpovídají preferencím.');
+            }
+        }
+
+        function displayProgram() {
+            const container = document.getElementById('programContainer');
+            container.innerHTML = '';
+
+            const filtered = getFilteredProgram();
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">Žádné položky k zobrazení. Zkuste změnit filtr.</div>';
+                return;
+            }
+
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `program-item ${item.status}`;
+                div.onclick = () => toggleStatus(item.id);
+
+                let tagsHtml = '';
+                if (item.tags.length > 0) {
+                    tagsHtml = '<div class="program-tags">' + 
+                        item.tags.map(tag => `<span class="tag">${tag}</span>`).join('') + 
+                        '</div>';
+                }
+
+                const statusText = {
+                    'interested': 'Zajímá mě',
+                    'maybe': 'Možná',
+                    'not-interested': 'Nezajímá mě',
+                    'default': 'Neoznačeno'
+                };
+
+                div.innerHTML = `
+                    <div class="program-time">${item.time || 'Čas neuveden'}</div>
+                    <div class="program-title">${item.title}</div>
+                    ${item.speaker ? `<div class="program-speaker">👤 ${item.speaker}</div>` : ''}
+                    ${item.description ? `<div class="program-description">${item.description}</div>` : ''}
+                    ${tagsHtml}
+                    <div class="status-hint">
+                        <strong>Aktuální status:</strong> ${statusText[item.status]} | <strong>Klikněte pro změnu</strong>
+                    </div>
+                `;
+
+                container.appendChild(div);
+            });
+
+            updateStats();
+        }
+
+        function toggleStatus(id) {
+            const item = programData.find(p => p.id === id);
+            if (!item) return;
+
+            const statuses = ['default', 'interested', 'maybe', 'not-interested'];
+            const currentIndex = statuses.indexOf(item.status);
+            item.status = statuses[(currentIndex + 1) % statuses.length];
+
+            displayProgram();
+            saveProgram();
+        }
+
+        function filterProgram(filter) {
+            currentFilter = filter;
+            
+            // Aktualizovat tlačítka
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            displayProgram();
+        }
+
+        function getFilteredProgram() {
+            if (currentFilter === 'all') {
+                return programData;
+            }
+
+            const statusMap = {
+                'interested': 'interested',
+                'maybe': 'maybe',
+                'not-interested': 'not-interested',
+                'unmarked': 'default'
+            };
+
+            return programData.filter(item => item.status === statusMap[currentFilter]);
+        }
+
+        function updateStats() {
+            const stats = {
+                total: programData.length,
+                interested: programData.filter(p => p.status === 'interested').length,
+                maybe: programData.filter(p => p.status === 'maybe').length,
+                notInterested: programData.filter(p => p.status === 'not-interested').length,
+                unmarked: programData.filter(p => p.status === 'default').length
+            };
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-number">${stats.total}</div>
+                    <div class="stat-label">Celkem</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="color: #28a745;">${stats.interested}</div>
+                    <div class="stat-label">Zajímá</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="color: #ffc107;">${stats.maybe}</div>
+                    <div class="stat-label">Možná</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="color: #dc3545;">${stats.notInterested}</div>
+                    <div class="stat-label">Nezajímá</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" style="color: #6c757d;">${stats.unmarked}</div>
+                    <div class="stat-label">Neoznačeno</div>
+                </div>
+            `;
+        }
+
+        function exportProgram() {
+            const interested = programData.filter(p => p.status === 'interested').sort((a, b) => a.time.localeCompare(b.time));
+            const maybe = programData.filter(p => p.status === 'maybe').sort((a, b) => a.time.localeCompare(b.time));
+
+            let exportText = '═══════════════════════════════════════════════════════\n';
+            exportText += '   COLORS OF FINANCE 2025 - MŮJ VYBRANÝ PROGRAM\n';
+            exportText += '═══════════════════════════════════════════════════════\n\n';
+
+            if (interested.length > 0) {
+                exportText += '🟢 ZAJÍMÁ MĚ (Zelená - Priorita)\n';
+                exportText += '─────────────────────────────────────────────────────\n\n';
+                interested.forEach(item => {
+                    exportText += `${item.time} - ${item.title}`;
+                    if (item.speaker) exportText += `\n   👤 ${item.speaker}`;
+                    if (item.description) exportText += `\n   ${item.description}`;
+                    exportText += '\n\n';
+                });
+            }
+
+            if (maybe.length > 0) {
+                exportText += '\n🟠 MOŽNÁ (Oranžová - Sekundární zájem)\n';
+                exportText += '─────────────────────────────────────────────────────\n\n';
+                maybe.forEach(item => {
+                    exportText += `${item.time} - ${item.title}`;
+                    if (item.speaker) exportText += `\n   👤 ${item.speaker}`;
+                    if (item.description) exportText += `\n   ${item.description}`;
+                    exportText += '\n\n';
+                });
+            }
+
+            if (interested.length === 0 && maybe.length === 0) {
+                exportText += '⚠️ Zatím nemáte označené žádné položky.\n';
+            }
+
+            exportText += '\n═══════════════════════════════════════════════════════\n';
+            exportText += `Celkem: ${interested.length} prioritních, ${maybe.length} sekundárních\n`;
+            exportText += '═══════════════════════════════════════════════════════\n';
+
+            // Vytvořit a stáhnout soubor
+            const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'colors-of-finance-muj-program.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function resetView() {
+            document.getElementById('inputSection').classList.remove('hidden');
+            document.getElementById('programSection').classList.add('hidden');
+        }
+
+        function saveProgram() {
+            localStorage.setItem('cof_program', JSON.stringify(programData));
+        }
+
+        function loadSavedStates() {
+            const saved = localStorage.getItem('cof_program');
+            if (saved) {
+                try {
+                    const savedData = JSON.parse(saved);
+                    // Sloučit uložené stavy s novými daty podle ID
+                    programData.forEach(item => {
+                        const savedItem = savedData.find(s => s.id === item.id && s.title === item.title);
+                        if (savedItem) {
+                            item.status = savedItem.status;
+                        }
+                    });
+                } catch (e) {
+                    console.error('Chyba při načítání uložených dat:', e);
+                }
+            }
+        }
+
+        // Načíst uložený program při načtení stránky
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('cof_program');
+            if (saved) {
+                try {
+                    const savedData = JSON.parse(saved);
+                    if (savedData.length > 0) {
+                        // Rekonstruovat text z dat
+                        let text = '';
+                        savedData.forEach(item => {
+                            text += `${item.time} | ${item.title}`;
+                            if (item.speaker) text += ` | ${item.speaker}`;
+                            if (item.description) text += ` | ${item.description}`;
+                            text += '\n';
+                        });
+                        document.getElementById('programInput').value = text.trim();
+                    }
+                } catch (e) {
+                    console.error('Chyba při načítání:', e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
