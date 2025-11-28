@@ -417,8 +417,9 @@
 
         // Klíčová slova pro automatické označování
         const preferences = {
-            interested: ['IT', 'AI', 'umělá inteligence', 'artificial intelligence', 'LinkedIn', 'úvodní seminář', 'úvod', 'digitální', 'digital', 'technologie', 'tech', 'automatizace', 'software', 'aplikace', 'platforma', 'inovace', 'startup', 'fintech', 'kybernetická', 'cyber', 'bezpečnost', 'security', 'cloud', 'data', 'analytics', 'big data'],
-            maybe: ['investice', 'investování', 'portfolio', 'akcie', 'kryptoměny', 'crypto', 'blockchain', 'marketing', 'obchod', 'byznys', 'strategie', 'plánování', 'analýza', 'síť', 'networking', 'vztahy', 'klient', 'poradenství', 'peníze', 'finance', 'bankovnictví', 'banking']
+            interested: ['AI', 'umělá inteligence', 'artificial intelligence', 'LinkedIn', 'úvodní seminář', 'úvod', 'digitální', 'digital', 'automatizace', 'platforma', 'inovace', 'startup', 'fintech', 'data', 'analytics', 'big data'],
+            maybe: ['investice', 'investování', 'portfolio', 'akcie', 'kryptoměny', 'crypto', 'blockchain', 'marketing', 'obchod', 'byznys', 'strategie', 'plánování', 'analýza', 'síť', 'networking', 'vztahy', 'klient', 'poradenství', 'peníze', 'finance', 'bankovnictví', 'banking'],
+            notInterested: ['IT', 'technologie', 'tech', 'software', 'aplikace', 'systém', 'kybernetická', 'cyber', 'bezpečnost', 'security', 'cloud', 'cloud computing']
         };
 
         function parseProgram(text) {
@@ -544,11 +545,15 @@
                 // Pro automatické označování přepíšeme jen neoznačené
                 if (item.status !== 'default') return;
 
-                // Zkontrolovat preference
+                // Zkontrolovat preference - nejprve not-interested (má prioritu)
+                const hasNotInterested = preferences.notInterested.some(keyword => text.includes(keyword.toLowerCase()));
                 const hasInterested = preferences.interested.some(keyword => text.includes(keyword.toLowerCase()));
                 const hasMaybe = preferences.maybe.some(keyword => text.includes(keyword.toLowerCase()));
 
-                if (hasInterested) {
+                if (hasNotInterested) {
+                    item.status = 'not-interested';
+                    markedCount++;
+                } else if (hasInterested) {
                     item.status = 'interested';
                     markedCount++;
                 } else if (hasMaybe) {
@@ -561,7 +566,7 @@
             saveProgram();
             
             if (markedCount > 0) {
-                alert(`Automaticky označeno ${markedCount} položek podle vašich preferencí (IT, AI, LinkedIn, Úvodní seminář).`);
+                alert(`Automaticky označeno ${markedCount} položek podle vašich preferencí (AI, LinkedIn, Úvodní seminář). Položky s IT byly označeny jako nezajímavé.`);
             } else {
                 alert('Žádné nové položky nebyly automaticky označeny. Možná už jsou všechny označené nebo neodpovídají preferencím.');
             }
